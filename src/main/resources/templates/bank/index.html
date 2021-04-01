@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/js/jquery-3.5.1.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous"/>
+    <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <title>Bank</title>
+    <style>
+        .pagination{
+            margin-left : 1000px;
+        }
+        .navbar{
+            background-color: #e3f2fd;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+    <div class="container">
+        <ul class="nav navbar-nav navbar-left">
+            <a class="navbar-brand" style="color: black;">BANK</a>
+        </ul>
+    </div>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
+
+<!-- MODAL 1-->
+
+<div class="container mt-5">
+    <!-- Modal Tambah -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal Content -->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #e3f2fd;">
+                    <h6 class="modal-title" >Tambah</h6>
+                    <button type="button" onclick="BackBank()" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="false">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 2-->
+
+<div class="container mt-5">
+    <!-- Modal Ubah -->
+    <div class="modal fade" id="myModal2" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal Content -->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #e3f2fd;">
+                    <h6 class="modal-title" >Ubah</h6>
+                    <button type="button" onclick="BackBank()" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="false">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body2">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AKHIR MODAL 2-->
+
+<!-- MODAL 3-->
+
+<div class="container mt-5">
+    <!-- Modal Hapus -->
+    <div class="modal fade" id="myModal3" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal Content -->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #e3f2fd;">
+                    <h6 class="modal-title" >Hapus</h6>
+                    <button type="button" onclick="BackBank()" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="false">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body3">
+                    <p>Anda akan menghapus cara pembayaran Docar?</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AKHIR MODAL 3-->
+
+<!-- MODAL 4 -->
+
+<div class="container mt-5">
+    <!-- Modal Hapus -->
+    <div class="modal fade" id="myModal4" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal Content -->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #e3f2fd;">
+                    <h6 class="modal-title text-align:center"></h6>
+                    <button type="button" onclick="BackBank()" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="false">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body3">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AKHIR MODAL 4 -->
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm-5 mb-5">
+            <input type="text" class="form-control" placeholder="Search by name" onkeyup="SearchByBank(this.value)">
+        </div>
+
+        <div class="col">
+            <button type="button" class="btn btn-primary float-right" data-bs-toggle="modal" data-bs-target="#myModal"
+                    onclick="Tambah()">Tambah
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- AKHIR MODAL -->
+
+<div id="bankList"></div>
+
+<script>
+
+    $.ajax ({
+        url: '/api/bankmapped',
+        type: 'get',
+        contentType: 'application/json',
+        success: function(data)
+        {
+            var str = '<table class = "table table-bordered" align="center" style="width:80%">';
+            str += '<tr>';
+            str += '<th style = "text-align:center">Name</th>';
+            str += '<th style ="text-align:center">Kode VA</th>';
+            str += '<th style ="text-align:center">#</th>';
+            str += '</tr>';
+
+            for(i = 0; i < data.bank.length; i++)
+            {
+                str += '<tr>';
+                str += '<td style="text-align:center">' + data.bank[i].name + '</td>';
+                str += '<td style="text-align:center">' + data.bank[i].vaCode + '</td>';
+                str += '<td style="text-align:center">';
+                str += '<button style="width:40px; height:40px;" value="'+ data.bank[i].id+ '" class="btn btn-sm btn-primary" onclick="formEdit(this.value)">U</button>';
+                str += '<button style="width:40px; height:40px;" value="'+ data.bank[i].id+ '" class="btn btn-danger ml-3" onclick="Helper(this.value)">H</button>';
+                str += '</td>';
+                str += '</tr>';
+            }
+
+            str += '</table>';
+            str += "<br>"
+			str += '<nav aria-label="Page navigation">';
+			str += '<ul class="pagination"">';
+			str += '<li class="page-item"><a class="page-link" onclick="NextPage('+(data.currentPage - 1)+','+length+')">Previous</a></li>'
+			var index = 1;
+			    for (i = 0; i < data.totalPages; i++)
+			    {
+				        str += '<li class="page-item"><a id="pageslink" class="page-link" onclick="NextPage('+i+','+length+')">'+index+'</a></li>'
+				        index++;
+			    }
+			str += '<li class="page-item"><a class="page-link" onclick="NextPage('+(data.currentPage + 1)+','+length+')">Next</a></li>'
+			str += '</ul>'
+			str += '</nav>';
+
+			NextPage(0,5);
+        }
+
+    });
+
+function NextPage(currentPage, length){
+
+    $.ajax({
+        url : '/api/bankmapped?page='+currentPage+'&size='+length,
+		type : 'get',
+		contentType : 'application/json',
+		success : function(data) {
+
+            var str = '<table class="table table-bordered" align="center" style="width:80%;" >';
+                            str += '<tr style="background-color: #e3f2fd;">';
+                            str += '<th style="text-align:center"> Name </th>';
+                            str += '<th style ="text-align:center">Kode VA</th>';
+                            str += '<th style="text-align:center" colspan = "2"> # </th>';
+                            str += '</tr>';
+                            for (i = 0; i < data.bank.length; i++) {
+                                    str += "<tr >";
+                                    str += '<td style="text-align:center">' + data.bank[i].name+ '</td>';
+                                    str += '<td style="text-align:center">' + data.bank[i].vaCode + '</td>';
+                                    str += '<td style="text-align:center">';
+                                    str += '<button style="width:40px; height:40px;" class="btn btn-sm btn-primary" value="'+ data.bank[i].id+ '" onclick="formEdit(this.value)">U</button>';
+                                    str += '<button style="width:40px; height:40px;" class="btn btn-danger ml-3" value="'+ data.bank[i].id+ '" onclick="Helper(this.value)">H</button>';
+                                    str += '</td>';
+                                    str += "</tr>";
+                                }
+                                str += "</table>";
+                                str += "<br>"
+                                str += '<nav aria-label="Page navigation">';
+                                str += '<ul class="pagination">'
+                                str += '<li class="page-item"><a class="page-link" onclick="NextPage('+(data.currentPage - 1)+','+length+')">Previous</a></li>'
+                                var index = 1;
+                                for (i = 0; i < data.totalPages; i++) {
+                                    str += '<li class="page-item"><a id="pageslink" class="page-link" onclick="NextPage('+i+','+length+')">'+index+'</a></li>'
+                                    index++;
+                                }
+                                str += '<li class="page-item"><a class="page-link" onclick="NextPage('+(data.currentPage + 1)+','+length+')">Next</a></li>'
+                                str += '</ul>'
+                                str += '</nav>';
+                                $('#bankList').html(str);
+                            }
+
+    });
+
+
+}
+
+function Tambah()
+{
+      var form = '<table class="table table-borderless">';
+      form += '<tr>';
+      form += '<td>';
+      form += '<label for="name">Nama*</label>';
+      form += '<input class = "form-control" type="text" id="name">';
+      form += '</td>';
+      form += '</tr>';
+      form += '<tr>';
+      form += '<td>';
+      form += '<label for="name">Kode VA*</label>';
+      form += '<input class = "form-control" type="text" id="vaCode">';
+      form += '</td>';
+      form += '</tr>';
+      form += '<tr>';
+      form += '<td>';
+      form += '<button class ="btn btn-success  float-right ml-5" onclick="SaveBank(this.value)">Simpan</button>';
+      form += '<button class ="btn btn-secondary float-right" onclick="BackBank()">Batal</button>';
+      form += '</td>';
+      form += '</tr>';
+      form += '</table>';
+
+      $('.modal-title').html("Tambah Bank")
+      $('.modal-body').html(form);
+      $('#myModal').modal('show');
+}
+
+function SaveBank()
+{
+console.log("hit")
+    var nameSave = $("#name").val();
+    var vaCodeSave = $("#vaCode").val();
+    if(nameSave != "" && vaCodeSave != "" && nameSave != " " && vaCode != " ")
+    {
+        var formData = '{';
+        formData += '"name":"' + $('#name').val()+'",';
+        formData += '"vaCode":"' + $('#vaCode').val()+'",';
+        formData += '"createdOn":"2021-30-25 13:33:40",';
+        formData += '"createdBy":"1",';
+        formData += '"isDelete":"false"';
+        formData += '}';
+
+        console.log(formData)
+        $.ajax
+        ({
+            url : '/api/bank',
+            type : 'post',
+            contentType : 'application/json',
+            data : formData,
+            success : function(data)
+            {
+                   swal("Data Berhasil Disimpan", "", "success");
+                   window.setInterval(delaySave, 2000);
+            }
+        })
+
+    }
+        else
+        {
+        swal("Peringatan!", "Nama dan Kode VA harus diisi!");
+        }
+}
+
+function delaySave(){
+
+        window.location.href = '/bank/index';
+
+}
+
+function formEdit (id)
+{
+    $.ajax
+    ({
+        url : '/api/bank/' + id,
+        type : 'get',
+        contentType : 'application/json',
+        success : function(data)
+        {
+            var form = '<table class = "table table-borderless">';
+            form += '<tr>';
+            form += '<td>';
+            form += '<label for="name">Nama*</label>';
+            form += '<input class = "form-control" value="'+data.name+'" type="text" id="name">';
+            form += '</td>';
+            form += '</tr>';
+            form += '<tr>';
+            form += '<td>';
+            form += '<label for="name">Kode Va*</label>';
+            form += '<input class = "form-control" type="text" id="vaCode" value="'+data.vaCode+'">';
+            form += '</td>';
+            form += '</tr>';
+            form += '<tr>';
+            form += '<td>';
+            form += '<button class="btn btn-success float-right ml-5" value ="'+data.id+'" onclick="UpdateBank(this.value)">Simpan</button>';
+            form += '<button class="btn btn-secondary float-right" onclick="BackBank()">Batal</button>';
+            form += '</td>';
+            form += '</tr>';
+            form += '</table>';
+
+            $('.modal-title').html("Ubah Bank")
+            $('.modal-body').html(form);
+            $('#myModal').modal('show');
+        }
+    })
+}
+
+function UpdateBank(id)
+{
+
+ $.ajax ({
+
+    url : '/api/bank/' + id,
+    type : 'get',
+    contentType : 'application/json',
+    success : function(dataGet){
+
+    var formData = '{';
+    formData += '"name":"' + $('#name').val() + '",';
+    formData += '"vaCode":"' + $('#vaCode').val()+'",';
+    formData += '"createdOn":"' + dataGet.createdOn + '",';
+    formData += '"createdBy":"1",';
+    formData += '"modifiedOn":"2021-03-25 13:33:40",';
+    formData += '"modifiedBy":"1",';
+    formData += '"isDelete":"false"';
+    formData += '}';
+
+    console.log(formData)
+    $.ajax
+    ({
+        url : '/api/bank/' + id,
+        type : 'put',
+        contentType : 'application/json',
+        data : formData,
+        success : function(data)
+        {
+            EditConfirm();
+        }
+    })
+
+    }
+
+ })
+
+
+}
+
+function EditConfirm(){
+
+    swal("Data Berhasil Diubah", "", "success");
+    window.setInterval(delayEdit, 3000);
+
+}
+
+function delayEdit(){
+
+    window.location.href = '/bank/index';
+
+}
+
+function BackBank(){
+
+    $(function () {
+    window.location.href='/bank/index';
+
+    });
+
+}
+
+function SearchByBank(name){
+  if(name.length > 0 ){
+    $.ajax({
+      url : '/api/searchbank/' + name,
+      type : 'get',
+      contentType : 'application/json',
+      success : function(data){
+        //tampilan hasil search
+
+          var table = '<table class="table table-bordered" align="center" style="width:80%" >';
+          table += '<tr>'
+          table += '<th style="text-align:center"> Name </th>';
+          table += '<th style="text-align:center"> Kode VA </th>';
+          table += '<th style="text-align:center" colspan = "2"> # </th>';
+          table += '</tr>';
+
+          for( i = 0; i < data.length; i++){
+          table += '<tr>';
+          table += '<td style="text-align:center">' + data[i].name + '</td>';
+          table += '<td style="text-align:center">' + data[i].vaCode+ '</td>';
+          table += '<td style="text-align:center">';
+          table += '<button style="width:40px; height:40px;" class="btn btn-sm btn-primary" value ="' + data[i].id + '" onclick = "formEdit(this.value)">U</button>';
+          table += '<button style="width:40px; height:40px;" class="btn btn-danger ml-3" value ="' + data[i].id + '" onclick = "formDelete(this.value)">H</button>';
+          table += '</td>';
+          table += '</tr>';
+        }
+        table += '</table>';
+        $('#bankList').html(table);
+      }
+    });
+  }
+  else{
+    window.location.href='/bank/index';
+  }
+}
+
+function Helper(id){
+
+            $.ajax({
+
+			        url : '/api/deletebank/' + id,
+					type : 'get',
+					contentType : 'application/json',
+					success : function(data) {
+
+                         var form = '<table class="table table-borderless">';
+                         form += '<tr>';
+                         form += '<td style="text-align:center">Anda akan menghapus ' + data.name + ' dan Kode VA ' + data.vaCode + ' ? </td>';
+                         form += '</tr>';
+                         form += '<tr>';
+                         form += '<th>';
+                         form += '<button style="width:60px; height:40px;" class="btn btn-success float-right ml-5" value="'+ data.id+ '" onclick="formDelete(this.value)">Ya</button>';
+                         form += '<button style="width:60px; height:40px;" class="btn btn-secondary float-right" onclick="BackBank()">Tidak</button>';
+                         form += '</th>';
+                         form += '</tr>';
+                         form += '</table>';
+
+                            $('.modal-title').html("Hapus");
+                            $('.modal-body3').html(form);
+                            $('#myModal3').modal('show');
+
+                      }
+            });
+}
+
+function formDelete(id){
+
+            $.ajax({
+
+			        url : '/api/deletebank/' + id,
+					type : 'get',
+					contentType : 'application/json',
+					success : function(data) {
+
+					var jsonForm = '{';
+                            jsonForm += '"name":"' + data.name + '",';
+                            jsonForm += '"vaCode":"' + data.vaCode + '",';
+                            jsonForm += '"createdOn":"'+data.createdOn+'",';
+                            jsonForm += '"createdBy":"1",';
+                            jsonForm += '"deletedOn":"2021-03-25 13:33:40",';
+                            jsonForm += '"deletedBy":"1",';
+                            jsonForm += '"isDelete":"true"';
+                            jsonForm += '}';
+
+console.log(jsonForm)
+
+                                $.ajax({
+                                    url: '/api/deletebank/' + id,
+                                    type: 'put',
+                                    contentType: 'application/json',
+                                    data : jsonForm,
+                                    success: function(dataput)
+                                    {
+                                             swal("Data Berhasil Dihapus", "", "success");
+                                             window.setInterval(delayDelete, 2000);
+                                    }
+                                });
+
+					}
+
+					});
+    }
+
+function delayDelete(){
+
+    window.location.href ='/bank/index';
+
+}
+</script>
+</body>
+</html>

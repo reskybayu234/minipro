@@ -1,5 +1,6 @@
 package com.example.kurir254.kurir.controllers;
 
+import com.example.kurir254.kurir.models.Bank;
 import com.example.kurir254.kurir.models.Courier;
 import com.example.kurir254.kurir.repositories.CourierRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class ApiCourierController {
         Courier courierData = this.courierRepo.save(courier);
         try
         {
-            courier.setCreatedBy(1);
+            courier.setCreatedBy(1L);
             courier.setCreatedOn(new Date());
             this.courierRepo.save(courier);
             return new ResponseEntity<>("success", HttpStatus.OK);
@@ -66,7 +67,7 @@ public class ApiCourierController {
         Optional<Courier> courierData = this.courierRepo.findById(id);
         if(courierData.isPresent()){
             courier.setId(id);
-            courier.setModifiedBy(1);
+            courier.setModifiedBy(1L);
             courier.setModifiedOn(new Date());
             this.courierRepo.save(courier);
             ResponseEntity rest = new ResponseEntity<>("Success", HttpStatus.OK);
@@ -84,7 +85,8 @@ public class ApiCourierController {
             if (courier.isPresent()) {
                 ResponseEntity rest = new ResponseEntity<>(courier, HttpStatus.OK);
                 return rest;
-            } else {
+            }
+            else {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception exception) {
@@ -135,8 +137,9 @@ public class ApiCourierController {
         }
     }
 
+
     @PutMapping("/deletecourier/{id}")
-    public ResponseEntity<Object> DeleteCoureir(@RequestBody Courier courier, @PathVariable("id") Long id)
+    public ResponseEntity<Object> DeleteDua(@RequestBody Courier courier, @PathVariable("id") Long id)
     {
         Optional<Courier> courierData = this.courierRepo.findById(id);
         if(courierData.isPresent())
@@ -157,6 +160,29 @@ public class ApiCourierController {
 
     @GetMapping("/deletecourier/{id}")
     public ResponseEntity<List<Courier>> GetDeleteCourierById(@PathVariable("id") Long id)
+    {
+        try
+        {
+            Optional<Courier> courier = this.courierRepo.findById(id);
+            if (courier.isPresent())
+            {
+
+                ResponseEntity responseEntity = new ResponseEntity<>(courier, HttpStatus.OK);
+                return responseEntity;
+            }
+            else
+            {
+                return ResponseEntity.notFound().build();
+            }
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @GetMapping("/deletecourierdua/{id}")
+    public ResponseEntity<List<Courier>> GetDeleteCourierDuaById(@PathVariable("id") Long id)
     {
         try
         {

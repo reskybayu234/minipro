@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/js/jquery-3.5.1.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous"/>
+    <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>Courier Type</title>
+    <style>
+        .pagination{
+            margin-left : 1000px;
+        }
+        .navbar{
+            background-color: #e3f2fd;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+    <div class="container">
+        <ul class="nav navbar-nav navbar-left">
+            <a class="navbar-brand" style="color: black;">Courier Type</a>
+        </ul>
+    </div>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
+
+<!-- MODAL 1-->
+
+<div class="container mt-5">
+    <!-- Modal Tambah -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal Content -->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #e3f2fd;">
+                    <h6 class="modal-title" >Tambah</h6>
+                    <button type="button" onclick="BackCourier()" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="false">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 2-->
+
+<div class="container mt-5">
+    <!-- Modal Ubah -->
+    <div class="modal fade" id="myModal2" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal Content -->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #e3f2fd;">
+                    <h6 class="modal-title" >Ubah</h6>
+                    <button type="button" onclick="BackCourier()" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="false">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body2">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AKHIR MODAL 2-->
+
+<!-- MODAL 3-->
+
+<div class="container mt-5">
+    <!-- Modal Hapus -->
+    <div class="modal fade" id="myModal3" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal Content -->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #e3f2fd;">
+                    <h6 class="modal-title" >Hapus</h6>
+                    <button type="button" onclick="BackCourier()" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="false">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body3">
+                    <p>Anda akan menghapus cara pembayaran Docar?</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AKHIR MODAL 3-->
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm-5 mb-5">
+            <input type="text" class="form-control" placeholder="Search by name" onkeyup="SearchByCourier(this.value)">
+        </div>
+
+        <div class="col">
+            <button type="button" class="btn btn-primary float-right" data-bs-toggle="modal" data-bs-target="#myModal"
+                    onclick="Tambah()">Tambah
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- AKHIR MODAL -->
+
+<div id="courierTypeList"></div>
+
+<script>
+
+    $.ajax ({
+        url: '/api/couriertypemapped',
+        type: 'get',
+        contentType: 'application/json',
+        success: function(data)
+        {
+            var str = '<table class = "table table-bordered" align="center" style="width:80%">';
+            str += '<tr>';
+            str += '<th style = "text-align:center">Name</th>';
+            str += '<th style ="text-align:center">Kode VA</th>';
+            str += '<th style ="text-align:center">#</th>';
+            str += '</tr>';
+
+            for(i = 0; i < data.courierType.length; i++)
+            {
+                str += '<tr>';
+                str += '<td style="text-align:center">' + data.courierType[i].name + '</td>';
+                str += '<td style="text-align:center"> apa ya </td>';
+                str += '<td style="text-align:center">';
+                str += '<button style="width:40px; height:40px;" value="'+ data.courierType[i].id+ '" class="btn btn-sm btn-primary" onclick="formEdit(this.value)">U</button>';
+                str += '<button style="width:40px; height:40px;" value="'+ data.courierType[i].id+ '" class="btn btn-danger ml-3">H</button>';
+                str += '</td>';
+                str += '</tr>';
+            }
+
+            str += '</table>';
+            str += "<br>"
+			str += '<nav aria-label="Page navigation">';
+			str += '<ul class="pagination"">';
+			str += '<li class="page-item"><a class="page-link" onclick="NextPage('+(data.currentPage - 1)+','+length+')">Previous</a></li>'
+			var index = 1;
+			    for (i = 0; i < data.totalPages; i++)
+			    {
+				        str += '<li class="page-item"><a id="pageslink" class="page-link" onclick="NextPage('+i+','+length+')">'+index+'</a></li>'
+				        index++;
+			    }
+			str += '<li class="page-item"><a class="page-link" onclick="NextPage('+(data.currentPage + 1)+','+length+')">Next</a></li>'
+			str += '</ul>'
+			str += '</nav>';
+
+			NextPage(0,5);
+        }
+
+    });
+
+function NextPage(currentPage, length){
+
+    $.ajax({
+        url : '/api/couriertypemapped?page='+currentPage+'&size='+length,
+		type : 'get',
+		contentType : 'application/json',
+		success : function(data) {
+
+            var str = '<table class="table table-bordered" align="center" style="width:80%;" >';
+                            str += '<tr style="background-color: #e3f2fd;">';
+                            str += '<th style="text-align:center"> Name </th>';
+                            str += '<th style ="text-align:center">Kode VA</th>';
+                            str += '<th style="text-align:center" colspan = "2"> # </th>';
+                            str += '</tr>';
+                            for (i = 0; i < data.courierType.length; i++) {
+                                    str += "<tr >";
+                                    str += '<td style="text-align:center">' + data.courierType[i].name+ '</td>';
+                                    str += '<td style="text-align:center"> apa ya </td>';
+                                    str += '<td style="text-align:center">';
+                                    str += '<button style="width:40px; height:40px;" class="btn btn-sm btn-primary" value="'+ data.courierType[i].id+ '" onclick="formEdit(this.value)">U</button>';
+                                    str += '<button style="width:40px; height:40px;" class="btn btn-danger ml-3" value="'+ data.courierType[i].id+ '" onclick="Helper(this.value)">H</button>';
+                                    str += '</td>';
+                                    str += "</tr>";
+                                }
+                                str += "</table>";
+                                str += "<br>"
+                                str += '<nav aria-label="Page navigation">';
+                                str += '<ul class="pagination">'
+                                str += '<li class="page-item"><a class="page-link" onclick="NextPage('+(data.currentPage - 1)+','+length+')">Previous</a></li>'
+                                var index = 1;
+                                for (i = 0; i < data.totalPages; i++) {
+                                    str += '<li class="page-item"><a id="pageslink" class="page-link" onclick="NextPage('+i+','+length+')">'+index+'</a></li>'
+                                    index++;
+                                }
+                                str += '<li class="page-item"><a class="page-link" onclick="NextPage('+(data.currentPage + 1)+','+length+')">Next</a></li>'
+                                str += '</ul>'
+                                str += '</nav>';
+                                $('#courierTypeList').html(str);
+                            }
+
+    });
+
+
+}
+
+function Tambah()
+{
+      var form = '<table class="table table-borderless">';
+      form += '<label for="name">Kurir*</label>';
+      form += '<select class="form-select form-select-lg mb-3" id="size">'
+	  form += '<option value="3" selected>-- pilih --</option>'
+      form += '<option value="5">5</option>'
+      form += '<option value="10">10</option>'
+      form += '<option value="15">15</option>'
+      form += '</select>'
+
+
+      form += '<tr>';
+      form += '<td>';
+      form += '<label for="name">Nama*</label>';
+      form += '<input class = "form-control" type="text" id="name">';
+      form += '</td>';
+      form += '</tr>';
+      form += '<tr>';
+      form += '<td>';
+      form += '<button class ="btn btn-success  float-right ml-5" onclick="SaveCourierType(this.value)">Simpan</button>';
+      form += '<button class ="btn btn-secondary float-right">Batal</button>';
+      form += '</td>';
+      form += '</tr>';
+      form += '</table>';
+
+      $('.modal-title').html("Tambah Bank")
+      $('.modal-body').html(form);
+      $('#myModal').modal('show');
+}
+
+function SaveCourierType()
+{
+console.log("hit")
+    var nameSave = $("#name").val();
+    if(nameSave != "")
+    {
+        var formData = '{';
+        formData += '"name":"' + $('#name').val()+'"';
+        formData += '"createdOn":"2021-30-25 13:33:40",';
+        formData += '"createdBy":"1",';
+        formData += '"isDelete":"false"';
+        formData += '}';
+
+        $.ajax
+        ({
+            url : '/api/couriertype',
+            type : 'post',
+            contentType : 'application/json',
+            data : formData,
+            success : function(data)
+            {
+                window.location.href = '/couriertype/index';
+            }
+        })
+
+    }
+}
+
+function formEdit (id)
+{
+    $.ajax
+    ({
+        url : '/api/couriertype/' + id,
+        type : 'get',
+        contentType : 'application/json',
+        success : function(data)
+        {
+            var form = '<table class = "table table-borderless">';
+            form += '<label for="name">Kurir*</label>';
+            form += '<select class="form-select form-select-lg mb-3" id="size">'
+            form += '<option value="3" selected>-- pilih --</option>'
+            form += '<option value="5">5</option>'
+            form += '<option value="10">10</option>'
+            form += '<option value="15">15</option>'
+            form += '</select>'
+
+            form += '<tr>';
+            form += '<td>';
+            form += '<label for="name">Nama*</label>';
+            form += '<input class = "form-control" type="text" id="name" value="'+data.name+'">';
+            form += '</td>';
+            form += '</tr>';
+            form += '<tr>';
+            form += '<td>';
+            form += '<button class="btn btn-success float-right ml-5" value ="'+data.id+'" onclick="UpdateCourierType(this.value)">Simpan</button>';
+            form += '<button class="btn btn-secondary float-right" onclick="BackCourierType()">Batal</button>';
+            form += '</td>';
+            form += '</tr>';
+            form += '</table>';
+
+            $('.modal-title').html("Ubah Bank")
+            $('.modal-body').html(form);
+            $('#myModal').modal('show');
+        }
+    })
+}
+
+function UpdateCourierType(id)
+{
+    var formData = '{';
+    formData += '"name":"' + $('#name').val() + '"';
+    formData += '}';
+
+    $.ajax
+    ({
+        url : '/api/couriertype/' + id,
+        type : 'put',
+        contentType : 'application/json',
+        data : formData,
+        success : function(data)
+        {
+            window.location.href = '/couriertype/index';
+        }
+    })
+}
+
+function BackCourierType(){
+
+    $(function () {
+    window.location.href='/courier/index';
+
+    });
+
+}
+
+</script>
+</body>
+</html>

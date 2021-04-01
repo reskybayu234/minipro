@@ -18,7 +18,7 @@ public class CommonEntity {
     private Date createdOn;
 
     @Column(name = "createdby", nullable = false)
-    private long createdBy;
+    private Long createdBy;
 
     /// MODIFIED COLUMN ///
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
@@ -27,7 +27,7 @@ public class CommonEntity {
     private Date modifiedOn;
 
     @Column(name = "modifiedby", nullable = true)
-    private long modifiedBy;
+    private Long modifiedBy;
 
     /// DELETE ///
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -49,11 +49,11 @@ public class CommonEntity {
         this.createdOn = createdOn;
     }
 
-    public long getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(long createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -65,11 +65,11 @@ public class CommonEntity {
         this.modifiedOn = modifiedOn;
     }
 
-    public long getModifiedBy() {
+    public Long getModifiedBy() {
         return modifiedBy;
     }
 
-    public void setModifiedBy(long modifiedBy) {
+    public void setModifiedBy(Long modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 
