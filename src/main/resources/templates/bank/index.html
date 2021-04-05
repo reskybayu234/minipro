@@ -166,7 +166,7 @@
         contentType: 'application/json',
         success: function(data)
         {
-            var str = '<table class = "table table-bordered" align="center" style="width:80%">';
+            var str = '<table class = "table table-borderless" align="center" style="width:80%">';
             str += '<tr>';
             str += '<th style = "text-align:center">Name</th>';
             str += '<th style ="text-align:center">Kode VA</th>';
@@ -213,7 +213,7 @@ function NextPage(currentPage, length){
 		contentType : 'application/json',
 		success : function(data) {
 
-            var str = '<table class="table table-bordered" align="center" style="width:80%;" >';
+            var str = '<table class="table table-borderless" align="center" style="width:80%;" >';
                             str += '<tr style="background-color: #e3f2fd;">';
                             str += '<th style="text-align:center"> Name </th>';
                             str += '<th style ="text-align:center">Kode VA</th>';
@@ -280,38 +280,63 @@ function Tambah()
 
 function SaveBank()
 {
-console.log("hit")
-    var nameSave = $("#name").val();
-    var vaCodeSave = $("#vaCode").val();
-    if(nameSave != "" && vaCodeSave != "" && nameSave != " " && vaCode != " ")
-    {
-        var formData = '{';
-        formData += '"name":"' + $('#name').val()+'",';
-        formData += '"vaCode":"' + $('#vaCode').val()+'",';
-        formData += '"createdOn":"2021-30-25 13:33:40",';
-        formData += '"createdBy":"1",';
-        formData += '"isDelete":"false"';
-        formData += '}';
 
-        console.log(formData)
-        $.ajax
-        ({
-            url : '/api/bank',
-            type : 'post',
-            contentType : 'application/json',
-            data : formData,
-            success : function(data)
-            {
-                   swal("Data Berhasil Disimpan", "", "success");
-                   window.setInterval(delaySave, 2000);
-            }
-        })
+    $.ajax ({
 
-    }
-        else
+        url : '/api/bank',
+        type : 'get',
+        contentType : 'application/json',
+        success : function(dataGet)
         {
-        swal("Peringatan!", "Nama dan Kode VA harus diisi!");
-        }
+            var nameSave = $("#name").val();
+            var vaCodeSave = $("#vaCode").val();
+            if(nameSave != "" && vaCodeSave != "" && nameSave != " " && vaCode != " ")
+            {
+                var count = 0;
+
+                for (i=0;i < dataGet.length; i++){
+
+                    if(nameSave.toLowerCase() == dataGet[i].name.toLowerCase() || vaCodeSave == dataGet[i].vaCode )
+                    {
+                         count += 1;
+                    }
+
+                }
+                    if(count == 0){
+
+                        var formData = '{';
+                        formData += '"name":"' + $('#name').val()+'",';
+                        formData += '"vaCode":"' + $('#vaCode').val()+'",';
+                        formData += '"createdOn":"2021-30-25 13:33:40",';
+                        formData += '"createdBy":"1",';
+                        formData += '"isDelete":"false"';
+                        formData += '}';
+
+                                $.ajax
+                                ({
+                                    url : '/api/bank',
+                                    type : 'post',
+                                    contentType : 'application/json',
+                                    data : formData,
+                                    success : function(data)
+                                    {
+                                           swal("Data Berhasil Disimpan", "", "success");
+                                           window.setInterval(delaySave, 2000);
+                                    }
+                                })
+                    }
+                        else
+                        {
+                            swal("Peringatan!", "Nama atau Kode VA sudah ada");
+                        }
+            }
+              else
+                 {
+                        swal("Peringatan!", "Nama dan Kode VA harus diisi!");
+                 }
+}
+
+    })
 }
 
 function delaySave(){
@@ -428,7 +453,7 @@ function SearchByBank(name){
       success : function(data){
         //tampilan hasil search
 
-          var table = '<table class="table table-bordered" align="center" style="width:80%" >';
+          var table = '<table class="table table-borderless" align="center" style="width:80%" >';
           table += '<tr>'
           table += '<th style="text-align:center"> Name </th>';
           table += '<th style="text-align:center"> Kode VA </th>';
