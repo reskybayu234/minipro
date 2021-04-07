@@ -32,8 +32,11 @@
 
       .tab-content{
         border :1px solid deepskyblue;
-        padding : 20px;
+        padding : 50px;
       }
+      table, th, td {
+                      border: 1px;
+                    }
     </style>
 </head>
 <body>
@@ -128,13 +131,30 @@
                     </div>
 
                     <div class="tab-pane active" id="pembayaran">
-                        <div class="row border g-0 rounded shadow-sm">
+                        <div class="row border g-0 rounded shadow-sm" style="height: 200px;">
                             <div class="col p-4" id="ini">
 
                             </div>
                             <div class="col-auto">
                                 <button type="button" class="btn btn-primary float-right" data-bs-toggle="modal" data-bs-target="#myModal"
                                         onclick="Tambah()" style="margin-top:20px;">Tambah
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row border g-0 rounded shadow-sm" style="height: 300px; margin-top:20px;">
+                            <div class="col p-4" id="ini">
+
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-primary float-right" data-bs-toggle="modal" data-bs-target="#myModal"
+                                        onclick="Tambah()" style="margin-top:20px; margin-left: 10px;">Isi Saldo
+                                </button>
+                                <button type="button" class="btn btn-primary float-right" data-bs-toggle="modal" data-bs-target="#myModal"
+                                        onclick="Tambah()" style="margin-top:20px; margin-left: 10px;">Atur Pin
+                                </button>
+                                <button type="button" class="btn btn-primary float-right" data-bs-toggle="modal" data-bs-target="#myModal"
+                                        onclick="Tambah()" style="margin-top:20px; margin-left: 10px;">Tutup
                                 </button>
                             </div>
                         </div>
@@ -183,11 +203,11 @@ $.ajax ({
 <!--            var str = '<p style="text-align:right; margin-left:20px;">' + data[i].cardNumber + '</p>';-->
 
 
-            			var str = '<table class="table table-bordered" align="center" style="width:80%; margin-left:20px;" >';
+            			var str = '<table align="center" style="width:80%; margin-left:20px;" >';
 							for (i = 0; i < data.length; i++) {
 									str += '<tr>';
-									str += '<td style="height:50px"><h6 style="text-align:left">' + data[i].cardNumber + '</h6></td>';
-									str += '<td style="height:50px"><i class="fas fa-trash" style="color:deepskyblue" type="button"></i>  Hapus</td>';
+									str += '<td style="height:20px">' + data[i].cardNumber + '</td>';
+									str += '<td><i class="fas fa-trash" style="color:deepskyblue" type="button"></i>  Hapus</td>';
 									str += '</tr>';
 								}
 								str += "</table>";
