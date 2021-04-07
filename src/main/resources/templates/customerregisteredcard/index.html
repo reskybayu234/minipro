@@ -33,6 +33,7 @@
       .tab-content{
         border :1px solid deepskyblue;
         padding : 50px;
+        height:800px;
       }
       table, th, td {
                       border: 1px;
@@ -116,7 +117,7 @@
 
                             </div>
                         </div>
-                    </div>
+                    </div><!-- tab-pane profile -->
 
                     <div class="tab-pane active" id="alamat">
                         <div class="row border g-0 rounded shadow-sm">
@@ -128,22 +129,22 @@
 
                             </div>
                         </div>
-                    </div>
+                    </div><!-- tab-pane alamat -->
 
                     <div class="tab-pane active" id="pembayaran">
-                        <div class="row border g-0 rounded shadow-sm" style="height: 200px;">
+                        <div class="row border g-0 rounded shadow-sm" style="height: 300px;">
                             <div class="col p-4" id="ini">
 
                             </div>
                             <div class="col-auto">
                                 <button type="button" class="btn btn-primary float-right" data-bs-toggle="modal" data-bs-target="#myModal"
-                                        onclick="Tambah()" style="margin-top:20px;">Tambah
+                                        onclick="Tambah()" style="margin-top:20px;">+Tambah
                                 </button>
                             </div>
-                        </div>
+                        </div><!-- row pertama -->
 
                         <div class="row border g-0 rounded shadow-sm" style="height: 300px; margin-top:20px;">
-                            <div class="col p-4" id="ini">
+                            <div class="col p-4" id="ini1">
 
                             </div>
                             <div class="col-auto">
@@ -157,8 +158,8 @@
                                         onclick="Tambah()" style="margin-top:20px; margin-left: 10px;">Tutup
                                 </button>
                             </div>
-                        </div>
-                    </div>
+                        </div><!-- row kedua -->
+                    </div><!-- tab-pane pembayaran -->
 
                 </div><!-- Tab content -->
             </div>
@@ -202,8 +203,10 @@ $.ajax ({
 
 <!--            var str = '<p style="text-align:right; margin-left:20px;">' + data[i].cardNumber + '</p>';-->
 
-
-            			var str = '<table align="center" style="width:80%; margin-left:20px;" >';
+            			    var str = '<table align="center" style="width:80%; margin-left:20px;" >';
+                            str += '<tr>';
+                            str += '<th style="color:deepskyblue">Kartu Kredit / Debit (2/4 Tersimpan)</th>';
+                            str += '</tr>';
 							for (i = 0; i < data.length; i++) {
 									str += '<tr>';
 									str += '<td style="height:20px">' + data[i].cardNumber + '</td>';
