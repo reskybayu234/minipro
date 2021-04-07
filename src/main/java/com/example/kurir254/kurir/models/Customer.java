@@ -6,6 +6,8 @@ import org.hibernate.exception.DataException;
 import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name="m_customer")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
