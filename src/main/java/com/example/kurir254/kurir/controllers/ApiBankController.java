@@ -25,7 +25,7 @@ public class ApiBankController {
     {
         try
         {
-            List<Bank> bank = this.bankRepo.findAll();
+            List<Bank> bank = this.bankRepo.GetAvailable();
             return new ResponseEntity<>(bank, HttpStatus.OK);
         }
         catch (Exception e)

@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +28,7 @@ public class ApiCourierController {
     {
         try
         {
-            List<Courier> courier = this.courierRepo.findAll();
+            List<Courier> courier = this.courierRepo.GetAvailable();
             return new ResponseEntity<>(courier, HttpStatus.OK);
         }
         catch (Exception e)

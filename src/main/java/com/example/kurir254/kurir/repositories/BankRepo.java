@@ -10,9 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface BankRepo extends JpaRepository<Bank, Long>{
-    @Query("FROM Bank WHERE lower(Name) LIKE lower(concat('%',?1,'%'))")
+    @Query("FROM Bank WHERE lower(Name) LIKE lower(concat('%',?1,'%')) and isDelete = false")
     public List<Bank> SearchBank(String keyword);
 
     @Query("SElect f FROM Bank f WHERE isDelete = false")
     Page<Bank> GetAllBankDelete(Pageable pageable);
+
+    @Query("From Bank Where isDelete = false")
+    List<Bank>GetAvailable();
 }

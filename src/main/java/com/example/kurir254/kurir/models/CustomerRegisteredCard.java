@@ -14,7 +14,7 @@ public class CustomerRegisteredCard {
     @Column(name = "id", nullable = false)
     private Long Id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "customer_id", insertable = false, updatable = false)
     public Customer customer;
 
@@ -24,8 +24,8 @@ public class CustomerRegisteredCard {
     @Column(name = "card_number", length = 20, nullable = true)
     private String CardNumber;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-yyyy")
-    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM")
+    @Temporal(TemporalType.DATE)
     @Column(name = "validity_period", nullable = true)
     private Date ValidityPeriod;
 
